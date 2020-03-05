@@ -1,10 +1,7 @@
 var i = 0;
 var correctAnswer = 0;
 var inCorrect = 0;
-var timeCounter = 1;
-var score = 0;
-
-
+var timer = 60;
 var questions = [
   {
       question: "What does HTML stand for?",
@@ -78,6 +75,7 @@ $(document).ready(function() {
       correctAnswer = correctAnswer + 1; //correctAnswer += 1; correctAnswer++;
     } else {
       inCorrect++;
+      timer -= 10;
     }
     i++;
 
@@ -85,25 +83,33 @@ $(document).ready(function() {
   });
   $("#startButton").click(function(){
   var interval = setInterval(function() {
-    var timer = $("#stopWatch").html();
-    var seconds = parseInt(timer,10);
-    seconds -= 1;
+    timer -= 1;
 
-    if (seconds < 0 ) {
-        seconds = 59;
+    if (timer < 0 ) {
+        timer = 59;
     }
-    else if (seconds < 10 && length.seconds != 2) seconds = '0' + seconds;
-    $("#stopWatch").html(seconds);
+   $("#stopWatch").html(timer);
 
-    if (seconds == 0)
+    if (timer == 0) {
         clearInterval(interval);
+        setStorage();
+    }
 }, 1000);
 });
+function setStorage() {
+  var returnStor = localStorage.getItem("correctAnswer");
 
-$("#goback").click(function(){
-  var backButton = backButton;
-  backButton.back();
-  
+  if(returnStor == null || correctAnswer > parseInt(returnStor)){
+  localStorage.setItem("correctAnswer", correctAnswer);
+}
+
+};
+$("#view").click(function(){
+  $("#save-score").html(localStorage.getItem("correctAnswer"));
+
 });
+
+  
+
 
 });
